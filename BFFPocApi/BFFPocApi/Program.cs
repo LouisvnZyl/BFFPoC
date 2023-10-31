@@ -29,6 +29,7 @@ builder.Services.AddAuthentication(options =>
     {
         options.Cookie.Name = "auth_cookie";
         options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.HttpOnly = false;
 
         options.Events.OnRedirectToLogin = (context) =>
         {

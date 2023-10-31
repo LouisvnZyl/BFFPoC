@@ -21,7 +21,7 @@ export class AuthService {
   public testCookie() {
     const headers = this.getCookieHeaders();
 
-    return this.http.get<string>(`${this.url}/CookieCheck`, { headers: headers, withCredentials: false});
+    return this.http.get<string>(`${this.url}/CookieCheck`, { headers: headers, withCredentials: true});
   }
 
   private getCookieHeaders(): HttpHeaders {
