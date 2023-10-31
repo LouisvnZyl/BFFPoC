@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BFFPocApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [EnableCors("APIAllowOrigins")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

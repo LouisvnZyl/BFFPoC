@@ -13,7 +13,7 @@ namespace BFFPocApi.Services
                 new Claim(type: ClaimTypes.Name, value: "TestCookieName")
             };
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var identity = new ClaimsIdentity(claims, "Cookies");
 
             return new ClaimsPrincipal(identity);
         }

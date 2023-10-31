@@ -15,24 +15,24 @@ export class AuthService {
   public url = 'https://localhost:7254/Auth';
 
   public signIn(): Observable<void> {
-    return this.http.get<void>(`${this.url}/Login`);
+    return this.http.get<void>(`${this.url}/Login`, {withCredentials: true});
   }
 
   public testCookie() {
-    this.getCookieHeaders();
+    const headers = this.getCookieHeaders();
 
-    return this.http.get<Response>(`${this.url}/CookieCheck`);
+    return this.http.get<string>(`${this.url}/CookieCheck`, { headers: headers, withCredentials: false});
   }
 
   private getCookieHeaders(): HttpHeaders {
-    const cookieValue = this.cookieService.get('MyMagicalCookie');
+    const cookieValue = this.cookieService.get('auth_cookie');
 
     let cookies = document.cookie.split(';');
 
     console.log(cookies);
 
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${cookieValue}`,
+      Cookie: `auth_cookie=${cookieValue}`,
     });
 
     return headers;

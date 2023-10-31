@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.CookiePolicy;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,18 +14,21 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("APIAllowOrigins", builder =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyHeader()
-               .AllowAnyMethod();
+    builder.AllowAnyHeader()
+           .AllowAnyMethod()
+           .AllowCredentials()
+           .SetIsOriginAllowed(hostName => true);
     });
 });
 
-builder.Services.AddAuthentication("auth-cookie")
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "Cookies";
+})
     .AddCookie(options =>
     {
-        options.Cookie.Name = "MyMagicalCookie";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-        options.SlidingExpiration = true;
+        options.Cookie.Name = "auth_cookie";
+        options.Cookie.SameSite = SameSiteMode.None;
 
         options.Events.OnRedirectToLogin = (context) =>
         {
@@ -35,17 +36,6 @@ builder.Services.AddAuthentication("auth-cookie")
             return Task.CompletedTask;
         };
     });
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("Cookies", policy =>
-    {
-        policy.RequireAssertion(context =>
-        {
-            return true;
-        });
-    });
-});
 
 var app = builder.Build();
 

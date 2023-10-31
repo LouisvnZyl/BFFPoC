@@ -18,7 +18,7 @@ namespace BFFPocApi.Controllers
         {
             var claimsPrinciple = CookieCreationService.CreateCookie();
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrinciple, new AuthenticationProperties
+            await HttpContext.SignInAsync("Cookies", claimsPrinciple, new AuthenticationProperties
             {
                 IsPersistent= true,
                 AllowRefresh=true,
@@ -29,7 +29,7 @@ namespace BFFPocApi.Controllers
         }
 
         [HttpGet("CookieCheck")]
-        [Authorize(Policy = "Cookies")]
+        [Authorize(AuthenticationSchemes = "Cookies")]
         public IActionResult CookieCheck()
         {
             return Ok("ECookie Valid");
