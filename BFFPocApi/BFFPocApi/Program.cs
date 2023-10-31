@@ -12,6 +12,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient()
                 .AddDataProtection();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("APIAllowOrigins", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddAuthentication("auth-cookie")
     .AddCookie(options =>
     {
@@ -25,6 +35,17 @@ builder.Services.AddAuthentication("auth-cookie")
             return Task.CompletedTask;
         };
     });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Cookies", policy =>
+    {
+        policy.RequireAssertion(context =>
+        {
+            return true;
+        });
+    });
+});
 
 var app = builder.Build();
 
@@ -43,12 +64,10 @@ app.UseAuthorization();
 
 var cookiePolicyOptions = new CookiePolicyOptions
 {
-    MinimumSameSitePolicy = SameSiteMode.Strict,
-    HttpOnly = HttpOnlyPolicy.Always,
-    Secure = CookieSecurePolicy.None
 };
 
 app.UseCookiePolicy(cookiePolicyOptions);
+app.UseCors("APIAllowOrigins");
 
 app.MapControllers();
 

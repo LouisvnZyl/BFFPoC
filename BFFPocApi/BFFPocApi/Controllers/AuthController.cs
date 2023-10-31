@@ -1,6 +1,8 @@
 ﻿using BFFPocApi.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BFFPocApi.Controllers
@@ -8,6 +10,7 @@ namespace BFFPocApi.Controllers
 
     [ApiController]
     [Route("[controller]")]
+    [EnableCors("APIAllowOrigins")]
     public class AuthController : ControllerBase
     {
         [HttpGet("Login")]
@@ -22,7 +25,14 @@ namespace BFFPocApi.Controllers
                 ExpiresUtc= DateTime.UtcNow.AddMinutes(10)
             });
 
-            return Ok("Signed in successfully");
+            return Ok();
+        }
+
+        [HttpGet("CookieCheck")]
+        [Authorize(Policy = "Cookies")]
+        public IActionResult CookieCheck()
+        {
+            return Ok("ECookie Valid");
         }
     }
 }
