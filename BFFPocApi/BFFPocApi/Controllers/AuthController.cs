@@ -34,5 +34,11 @@ namespace BFFPocApi.Controllers
         {
             return Ok("ECookie Valid");
         }
+
+        [HttpGet("CookieCheck1")]
+        public IActionResult CookieCheck1()
+        {
+            return Ok("ECookie Valid 1");
+        }
     }
 }
